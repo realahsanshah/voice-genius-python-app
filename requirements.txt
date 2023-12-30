@@ -1,0 +1,7 @@
+streamlit
+openai
+elevenlabs
+SpeechRecognition
+python-dotenv
+pyaudio
+langchain
