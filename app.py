@@ -1,9 +1,10 @@
+import os
 import streamlit as st
 import speech_recognition as sr
 from langchain.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from elevenlabs import voices, generate, play,set_api_key
-set_api_key(st.secrets['ELEVENLABS_API_KEY'])
+set_api_key(os.getenv('ELEVENLABS_API_KEY'))
 
 voices_data = voices()
 selectedVoice = voices_data[0]
@@ -17,7 +18,7 @@ template: str = """You are voice assistant named 'Voice Genius'. \
 prompt_template = ChatPromptTemplate.from_template(template)
 print(prompt_template)
 llm_model: str = "gpt-3.5-turbo-1106"
-llm = ChatOpenAI(model=llm_model,openai_api_key=st.secrets['OPENAI_API_KEY'])
+llm = ChatOpenAI(model=llm_model,openai_api_key=os.getenv('OPENAI_API_KEY'))
 
 def speech_to_text():
     r = sr.Recognizer()
@@ -54,7 +55,9 @@ if('messages' not in st.session_state):
 
 record_btn = st.button(st.session_state['button_message'])
 
-st.session_state['status']=''
+if('status' not in st.session_state):
+    st.session_state['status']=''
+
 if record_btn:
     st.session_state['button_message'] = "Recording..."
     st.session_state['status'] = 'Recording...'
